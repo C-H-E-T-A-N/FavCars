@@ -1,0 +1,146 @@
+[
+  {
+    "make": "BMW", "model": "M3", "year": 2026, "variant": "Competition", "country": "Germany",
+    "bodyType": "Sedan", "fuelType": "Petrol", "transmission": "Automatic", "drivetrain": "RWD",
+    "engine": { "name": "S58 twin-turbo I6", "displacementCc": 2993, "cylinders": 6, "horsepower": 523 },
+    "image": { "url": "/images/bmw-m3.png", "source": "ai-generated", "credit": "Generated with ChatGPT (GPT Image)", "license": null }
+  },
+  {
+    "make": "Porsche", "model": "911", "year": 2026, "variant": "Carrera S", "country": "Germany",
+    "bodyType": "Coupe", "fuelType": "Petrol", "transmission": "Automatic", "drivetrain": "RWD",
+    "engine": { "name": "3.0L twin-turbo flat-6", "displacementCc": 2981, "cylinders": 6, "horsepower": 473 },
+    "image": { "url": "/images/porsche-911.png", "source": "ai-generated", "credit": "Generated with ChatGPT (GPT Image)", "license": null }
+  },
+  {
+    "make": "Toyota", "model": "Corolla", "year": 2026, "variant": "LE", "country": "Japan",
+    "bodyType": "Sedan", "fuelType": "Petrol", "transmission": "Automatic", "drivetrain": "FWD",
+    "engine": { "name": "2.0L I4", "displacementCc": 1987, "cylinders": 4, "horsepower": 169 },
+    "image": { "url": null, "source": null, "credit": null, "license": null }
+  },
+  {
+    "make": "Toyota", "model": "GR Supra", "year": 2026, "variant": "3.0", "country": "Japan",
+    "bodyType": "Coupe", "fuelType": "Petrol", "transmission": "Automatic", "drivetrain": "RWD",
+    "engine": { "name": "B58 turbo I6", "displacementCc": 2998, "cylinders": 6, "horsepower": 382 },
+    "image": { "url": null, "source": null, "credit": null, "license": null }
+  },
+  {
+    "make": "Tesla", "model": "Model 3", "year": 2026, "variant": "Long Range", "country": "United States",
+    "bodyType": "Sedan", "fuelType": "Electric", "transmission": "Automatic", "drivetrain": "RWD",
+    "engine": { "name": "Electric motor", "displacementCc": null, "cylinders": null, "horsepower": 283 },
+    "image": { "url": null, "source": null, "credit": null, "license": null }
+  },
+  {
+    "make": "Tesla", "model": "Model Y", "year": 2026, "variant": "Performance", "country": "United States",
+    "bodyType": "SUV", "fuelType": "Electric", "transmission": "Automatic", "drivetrain": "AWD",
+    "engine": { "name": "Dual electric motor", "displacementCc": null, "cylinders": null, "horsepower": 384 },
+    "image": { "url": null, "source": null, "credit": null, "license": null }
+  },
+  {
+    "make": "Ford", "model": "Mustang", "year": 2026, "variant": "GT", "country": "United States",
+    "bodyType": "Coupe", "fuelType": "Petrol", "transmission": "Manual", "drivetrain": "RWD",
+    "engine": { "name": "5.0L Coyote V8", "displacementCc": 4951, "cylinders": 8, "horsepower": 486 },
+    "image": { "url": null, "source": null, "credit": null, "license": null }
+  },
+  {
+    "make": "Ford", "model": "F-150", "year": 2026, "variant": "XLT", "country": "United States",
+    "bodyType": "Pickup", "fuelType": "Petrol", "transmission": "Automatic", "drivetrain": "4WD",
+    "engine": { "name": "3.5L EcoBoost V6", "displacementCc": 3496, "cylinders": 6, "horsepower": 400 },
+    "image": { "url": null, "source": null, "credit": null, "license": null }
+  },
+  {
+    "make": "Honda", "model": "Civic Type R", "year": 2026, "variant": "Type R", "country": "Japan",
+    "bodyType": "Hatchback", "fuelType": "Petrol", "transmission": "Manual", "drivetrain": "FWD",
+    "engine": { "name": "K20C1 turbo I4", "displacementCc": 1996, "cylinders": 4, "horsepower": 315 },
+    "image": { "url": null, "source": null, "credit": null, "license": null }
+  },
+  {
+    "make": "Honda", "model": "Civic", "year": 2026, "variant": "EX", "country": "Japan",
+    "bodyType": "Sedan", "fuelType": "Petrol", "transmission": "Automatic", "drivetrain": "FWD",
+    "engine": { "name": "2.0L I4", "displacementCc": 1998, "cylinders": 4, "horsepower": 158 },
+    "image": { "url": null, "source": null, "credit": null, "license": null }
+  },
+  {
+    "make": "Audi", "model": "RS6", "year": 2026, "variant": "Avant", "country": "Germany",
+    "bodyType": "Wagon", "fuelType": "Petrol", "transmission": "Automatic", "drivetrain": "AWD",
+    "engine": { "name": "4.0L twin-turbo V8", "displacementCc": 3996, "cylinders": 8, "horsepower": 600 },
+    "image": { "url": null, "source": null, "credit": null, "license": null }
+  },
+  {
+    "make": "Mercedes-AMG", "model": "C63", "year": 2026, "variant": "S E Performance", "country": "Germany",
+    "bodyType": "Sedan", "fuelType": "Hybrid", "transmission": "Automatic", "drivetrain": "AWD",
+    "engine": { "name": "M139 turbo I4 + electric", "displacementCc": 1991, "cylinders": 4, "horsepower": 671 },
+    "image": { "url": null, "source": null, "credit": null, "license": null }
+  },
+  {
+    "make": "Chevrolet", "model": "Corvette", "year": 2026, "variant": "Stingray", "country": "United States",
+    "bodyType": "Coupe", "fuelType": "Petrol", "transmission": "Automatic", "drivetrain": "RWD",
+    "engine": { "name": "LT2 V8", "displacementCc": 6162, "cylinders": 8, "horsepower": 495 },
+    "image": { "url": null, "source": null, "credit": null, "license": null }
+  },
+  {
+    "make": "Nissan", "model": "GT-R", "year": 2026, "variant": "Premium", "country": "Japan",
+    "bodyType": "Coupe", "fuelType": "Petrol", "transmission": "Automatic", "drivetrain": "AWD",
+    "engine": { "name": "VR38DETT twin-turbo V6", "displacementCc": 3799, "cylinders": 6, "horsepower": 565 },
+    "image": { "url": null, "source": null, "credit": null, "license": null }
+  },
+  {
+    "make": "Volkswagen", "model": "Golf", "year": 2026, "variant": "GTI", "country": "Germany",
+    "bodyType": "Hatchback", "fuelType": "Petrol", "transmission": "Manual", "drivetrain": "FWD",
+    "engine": { "name": "EA888 turbo I4", "displacementCc": 1984, "cylinders": 4, "horsepower": 241 },
+    "image": { "url": null, "source": null, "credit": null, "license": null }
+  },
+  {
+    "make": "Subaru", "model": "WRX", "year": 2026, "variant": "GT", "country": "Japan",
+    "bodyType": "Sedan", "fuelType": "Petrol", "transmission": "Manual", "drivetrain": "AWD",
+    "engine": { "name": "2.4L turbo flat-4", "displacementCc": 2387, "cylinders": 4, "horsepower": 271 },
+    "image": { "url": null, "source": null, "credit": null, "license": null }
+  },
+  {
+    "make": "Mazda", "model": "MX-5", "year": 2026, "variant": "Miata", "country": "Japan",
+    "bodyType": "Roadster", "fuelType": "Petrol", "transmission": "Manual", "drivetrain": "RWD",
+    "engine": { "name": "2.0L I4", "displacementCc": 1998, "cylinders": 4, "horsepower": 181 },
+    "image": { "url": null, "source": null, "credit": null, "license": null }
+  },
+  {
+    "make": "Hyundai", "model": "Ioniq 5", "year": 2026, "variant": "Limited AWD", "country": "South Korea",
+    "bodyType": "SUV", "fuelType": "Electric", "transmission": "Automatic", "drivetrain": "AWD",
+    "engine": { "name": "Dual electric motor", "displacementCc": null, "cylinders": null, "horsepower": 320 },
+    "image": { "url": null, "source": null, "credit": null, "license": null }
+  },
+  {
+    "make": "Kia", "model": "EV6", "year": 2026, "variant": "GT", "country": "South Korea",
+    "bodyType": "SUV", "fuelType": "Electric", "transmission": "Automatic", "drivetrain": "AWD",
+    "engine": { "name": "Dual electric motor", "displacementCc": null, "cylinders": null, "horsepower": 576 },
+    "image": { "url": null, "source": null, "credit": null, "license": null }
+  },
+  {
+    "make": "Ferrari", "model": "296 GTB", "year": 2026, "variant": "GTB", "country": "Italy",
+    "bodyType": "Coupe", "fuelType": "Hybrid", "transmission": "Automatic", "drivetrain": "RWD",
+    "engine": { "name": "3.0L turbo V6 + electric", "displacementCc": 2992, "cylinders": 6, "horsepower": 819 },
+    "image": { "url": "/images/ferrari-296-gtb.png", "source": "ai-generated", "credit": "Generated with ChatGPT (GPT Image)", "license": null }
+  },
+  {
+    "make": "Lamborghini", "model": "Huracan", "year": 2026, "variant": "STO", "country": "Italy",
+    "bodyType": "Coupe", "fuelType": "Petrol", "transmission": "Automatic", "drivetrain": "RWD",
+    "engine": { "name": "5.2L V10", "displacementCc": 5204, "cylinders": 10, "horsepower": 631 },
+    "image": { "url": null, "source": null, "credit": null, "license": null }
+  },
+  {
+    "make": "McLaren", "model": "720S", "year": 2026, "variant": "Performance", "country": "United Kingdom",
+    "bodyType": "Coupe", "fuelType": "Petrol", "transmission": "Automatic", "drivetrain": "RWD",
+    "engine": { "name": "4.0L twin-turbo V8", "displacementCc": 3994, "cylinders": 8, "horsepower": 710 },
+    "image": { "url": null, "source": null, "credit": null, "license": null }
+  },
+  {
+    "make": "Land Rover", "model": "Range Rover Sport", "year": 2026, "variant": "HSE", "country": "United Kingdom",
+    "bodyType": "SUV", "fuelType": "Diesel", "transmission": "Automatic", "drivetrain": "AWD",
+    "engine": { "name": "3.0L turbo-diesel I6", "displacementCc": 2996, "cylinders": 6, "horsepower": 350 },
+    "image": { "url": null, "source": null, "credit": null, "license": null }
+  },
+  {
+    "make": "Jeep", "model": "Wrangler", "year": 2026, "variant": "Rubicon", "country": "United States",
+    "bodyType": "SUV", "fuelType": "Petrol", "transmission": "Manual", "drivetrain": "4WD",
+    "engine": { "name": "Pentastar V6", "displacementCc": 3604, "cylinders": 6, "horsepower": 285 },
+    "image": { "url": null, "source": null, "credit": null, "license": null }
+  }
+]
