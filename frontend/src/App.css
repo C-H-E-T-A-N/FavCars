@@ -1117,7 +1117,9 @@
 }
 
 .modal h2 {
-  margin-top: 0;
+  /* Matches the ~20-28px rhythm every other gap in the modal already uses (flex gap + h3's own
+     margin) - without this the title sat flush against the first field with zero space at all. */
+  margin: 0 0 20px;
   color: var(--text-h);
 }
 
@@ -1206,6 +1208,14 @@
 
 .btn-danger:hover {
   background: var(--accent-bg);
+}
+
+/* Square icon-only variant for repeated per-row actions (admin table Edit/Delete/Approve/
+   Reject) - the icon alone is unambiguous there, so a text label is just noise repeated once
+   per row. aria-label/title on the button carry the accessible name instead. */
+.btn-icon-only {
+  padding: 9px;
+  gap: 0;
 }
 
 /* ---------- Admin dashboard ---------- */

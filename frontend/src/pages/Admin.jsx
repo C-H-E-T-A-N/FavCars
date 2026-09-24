@@ -214,8 +214,8 @@ function CarsTab() {
                   <td>{car.voteCount}</td>
                   <td>{car.source}</td>
                   <td className="admin-row-actions">
-                    <button className="btn-secondary" onClick={() => setEditingCar(car)}><PencilIcon className="icon icon-sm" /> Edit</button>
-                    <button className="btn-danger" onClick={() => remove(car)}><TrashIcon className="icon icon-sm" /> Delete</button>
+                    <button className="btn-secondary btn-icon-only" onClick={() => setEditingCar(car)} aria-label="Edit" title="Edit"><PencilIcon className="icon icon-sm" /></button>
+                    <button className="btn-danger btn-icon-only" onClick={() => remove(car)} aria-label="Delete" title="Delete"><TrashIcon className="icon icon-sm" /></button>
                   </td>
                 </tr>
               ))}
@@ -287,8 +287,8 @@ function RequestsTab() {
                   <td>{req.requestedByName} ({req.requestedByEmail})</td>
                   {status === 'PENDING' && (
                     <td className="admin-row-actions">
-                      <button className="btn-primary" onClick={() => approve(req)}><CheckIcon className="icon icon-sm" /> Approve</button>
-                      <button className="btn-danger" onClick={() => reject(req)}><XIcon className="icon icon-sm" /> Reject</button>
+                      <button className="btn-primary btn-icon-only" onClick={() => approve(req)} aria-label="Approve" title="Approve"><CheckIcon className="icon icon-sm" /></button>
+                      <button className="btn-danger btn-icon-only" onClick={() => reject(req)} aria-label="Reject" title="Reject"><XIcon className="icon icon-sm" /></button>
                     </td>
                   )}
                 </tr>
