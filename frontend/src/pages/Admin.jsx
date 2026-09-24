@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Pagination from '../components/Pagination';
@@ -84,7 +85,7 @@ function CarEditModal({ car, onClose, onSaved }) {
     }
   };
 
-  return (
+  return createPortal(
     <div className="modal-backdrop" onClick={onClose}>
       <div className="modal modal-wide" onClick={(e) => e.stopPropagation()}>
         <h2>{isNew ? 'Add Car' : `Edit ${car.make} ${car.model}`}</h2>
@@ -142,7 +143,8 @@ function CarEditModal({ car, onClose, onSaved }) {
           </div>
         </form>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
 

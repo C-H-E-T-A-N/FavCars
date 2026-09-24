@@ -1,5 +1,6 @@
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { useAuth } from '../context/AuthContext';
 import { googleLoginUrl, submitCarRequest } from '../services/api';
 import { CheckIcon, PlusIcon, SearchIcon, XIcon } from './icons';
@@ -103,7 +104,7 @@ export default function Navbar() {
         </button>
       </div>
 
-      {showRequestForm && (
+      {showRequestForm && createPortal(
         <div className="modal-backdrop" onClick={() => setShowRequestForm(false)}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
             <h2>Request a Car</h2>
@@ -147,7 +148,8 @@ export default function Navbar() {
               </form>
             )}
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </header>
   );
