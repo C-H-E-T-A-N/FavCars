@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { ArrowRightIcon } from './icons';
 
 export default function CarCard({ car }) {
   return (
@@ -16,7 +17,7 @@ export default function CarCard({ car }) {
         <div className="car-card-meta">
           {[car.year, car.country].filter(Boolean).join(' · ') || car.bodyType}
         </div>
-        <span className="car-card-link">View Details →</span>
+        <span className="car-card-link">View Details <ArrowRightIcon className="icon icon-sm" /></span>
       </div>
     </Link>
   );

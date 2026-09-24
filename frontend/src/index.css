@@ -5,7 +5,9 @@
   --border: #2a2c34;
   --text: #a3a6b3;
   --text-h: #ffffff;
-  --text-dim: #6b6e7a;
+  /* Lightened from #6b6e7a (3.85:1 on --bg, below the 4.5:1 AA threshold used at its normal
+     small-text sizes like table headers/meta) to 4.99:1, same hue, smallest shift that clears it. */
+  --text-dim: #7d8090;
   --accent: #e5344a;
   --accent-hover: #ff4358;
   --accent-bg: rgba(229, 52, 74, 0.12);
@@ -56,4 +58,28 @@ a {
 button {
   font-family: var(--sans);
   cursor: pointer;
+}
+
+/* Consistent, visible keyboard-focus ring across every interactive element - browsers already
+   show a default outline, this just makes it match the brand accent instead of varying per
+   element/browser. Mouse/touch clicks don't trigger :focus-visible, so this never shows up as
+   an unwanted "click ring". */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
