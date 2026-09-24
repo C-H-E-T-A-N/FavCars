@@ -6,6 +6,7 @@ import Explore from './pages/Explore';
 import CarDetails from './pages/CarDetails';
 import Login from './pages/Login';
 import About from './pages/About';
+import Admin from './pages/Admin';
 import './App.css';
 
 export default function App() {
@@ -20,6 +21,7 @@ export default function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/about" element={<About />} />
             <Route path="/cars/:id" element={<CarDetails />} />
+            <Route path="/admin" element={<Admin />} />
           </Routes>
         </main>
         <footer className="app-footer">

@@ -1,5 +1,6 @@
 package com.carsleaderboard.user;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -21,6 +22,9 @@ import java.time.Instant;
 public class CustomOAuth2UserService extends OidcUserService {
 
     private final UserRepository userRepository;
+
+    @Value("${app.admin-email}")
+    private String adminEmail;
 
     public CustomOAuth2UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -45,6 +49,8 @@ public class CustomOAuth2UserService extends OidcUserService {
         user.setName(name);
         user.setProfileImage(picture);
         user.setLastLoginAt(Instant.now());
+        // Re-checked on every login, so granting/revoking admin only needs an app.admin-email change.
+        user.setRole(adminEmail.equalsIgnoreCase(email) ? "ADMIN" : "USER");
         userRepository.save(user);
 
         return oidcUser;

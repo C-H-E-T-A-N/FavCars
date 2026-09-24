@@ -60,4 +60,14 @@ public class LeaderboardService {
         Long card = zSet.zCard(LEADERBOARD_KEY);
         return card != null ? card : 0;
     }
+
+    /** ZADD leaderboard:global <voteCount> carId - overwrites the score, for admin edits to a car's vote count. */
+    public void setScore(String carId, long voteCount) {
+        zSet.add(LEADERBOARD_KEY, carId, voteCount);
+    }
+
+    /** ZREM leaderboard:global carId - drops the car from ranking, for admin deletes. */
+    public void remove(String carId) {
+        zSet.remove(LEADERBOARD_KEY, carId);
+    }
 }
