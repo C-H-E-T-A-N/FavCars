@@ -1676,8 +1676,10 @@
   font-size: 12px;
 }
 
-.admin-votes-header,
-.admin-votes-cell {
+.admin-table th.admin-votes-header,
+.admin-table td.admin-votes-cell {
+  /* The bare class alone (0,1,0) lost to the base ".admin-table th"/"td" rule (0,1,1) regardless
+     of source order - it never actually applied. Matching th/td here restores it. */
   text-align: right;
 }
 
