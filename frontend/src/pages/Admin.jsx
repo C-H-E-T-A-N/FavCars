@@ -238,7 +238,7 @@ function CarsTab({ onChanged }) {
             <table className="admin-table">
               <thead>
                 <tr>
-                  <th>Vehicle</th><th>Year</th><th>Votes</th><th>Source</th><th>Actions</th>
+                  <th>Vehicle</th><th>Year</th><th className="admin-votes-header">Votes</th><th>Source</th><th>Actions</th>
                 </tr>
               </thead>
               <tbody>

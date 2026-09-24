@@ -1676,9 +1676,15 @@
   font-size: 12px;
 }
 
+.admin-votes-header,
+.admin-votes-cell {
+  text-align: right;
+}
+
 .admin-votes-cell {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   gap: 6px;
 }
 
