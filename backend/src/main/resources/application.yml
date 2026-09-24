@@ -4,6 +4,9 @@ spring:
   data:
     mongodb:
       uri: ${MONGODB_URI:mongodb://localhost:27017/car_leaderboard}
+      # Spring Boot 4.1.1's Mongo autoconfiguration doesn't reliably derive the database from the
+      # URI's path - without this it silently connects to Mongo's default "test" database instead.
+      database: ${MONGODB_DATABASE:car_leaderboard}
       # Spring Data Mongo doesn't build @Indexed/@CompoundIndex indexes unless this is on - without
       # it the votes collection's unique (userId, carId) index (and Car/User's unique indexes)
       # never actually get created, silently letting duplicate votes through.
@@ -11,6 +14,10 @@ spring:
     redis:
       host: ${REDIS_HOST:localhost}
       port: ${REDIS_PORT:6379}
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
   security:
     oauth2:
       client:
@@ -28,6 +35,11 @@ spring:
 
 app:
   frontend-url: ${FRONTEND_URL:http://localhost:5173}
+  # Only this Google account gets the admin dashboard / admin API access - see CustomOAuth2UserService.
+  admin-email: ${ADMIN_EMAIL:chetansharma.pvt@gmail.com}
+  # Admin-uploaded car photos land here, alongside the existing seed-car images (see data/README.md)
+  # so the dev server serves them the same way, at /images/<file>.
+  upload-dir: ${UPLOAD_DIR:../frontend/public/images}
 
 server:
   port: ${SERVER_PORT:8080}

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getLeaderboard } from '../services/api';
 
 const POLL_INTERVAL_MS = 7000;
@@ -10,14 +10,10 @@ export function useLeaderboard(page) {
   const [error, setError] = useState(null);
   const [lastUpdated, setLastUpdated] = useState(null);
 
-  const fetchedOnce = useRef(false);
-
   useEffect(() => {
     let cancelled = false;
-    fetchedOnce.current = false;
 
     const load = () => {
-      if (document.visibilityState !== 'visible') return;
       getLeaderboard(page)
         .then((res) => {
           if (cancelled) return;
@@ -29,18 +25,18 @@ export function useLeaderboard(page) {
           if (!cancelled) setError('Could not load the leaderboard. Is the backend running?');
         })
         .finally(() => {
-          if (!cancelled) {
-            setLoading(false);
-            fetchedOnce.current = true;
-          }
+          if (!cancelled) setLoading(false);
         });
     };
 
+    // Initial load always runs; only the recurring poll skips hidden tabs.
     load();
-    const interval = setInterval(load, POLL_INTERVAL_MS);
+    const interval = setInterval(() => {
+      if (document.visibilityState === 'visible') load();
+    }, POLL_INTERVAL_MS);
 
     const onVisibilityChange = () => {
-      if (document.visibilityState === 'visible' && fetchedOnce.current) load();
+      if (document.visibilityState === 'visible') load();
     };
     document.addEventListener('visibilitychange', onVisibilityChange);
 
