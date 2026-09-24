@@ -244,19 +244,25 @@ function CarsTab({ onChanged }) {
               <tbody>
                 {data.content.map((car) => (
                   <tr key={car.id}>
-                    <td className="admin-vehicle-cell">
-                      <VehicleThumb car={car} />
-                      <div className="admin-vehicle-identity">
-                        <div className="admin-vehicle-name">{car.make} {car.model}</div>
-                        {car.variant && <div className="admin-vehicle-variant">{car.variant}</div>}
+                    <td>
+                      <div className="admin-vehicle-cell">
+                        <VehicleThumb car={car} />
+                        <div className="admin-vehicle-identity">
+                          <div className="admin-vehicle-name">{car.make} {car.model}</div>
+                          {car.variant && <div className="admin-vehicle-variant">{car.variant}</div>}
+                        </div>
                       </div>
                     </td>
                     <td>{car.year ?? '—'}</td>
-                    <td className="admin-votes-cell"><ActivityIcon className="icon icon-sm" />{car.voteCount}</td>
+                    <td className="admin-votes-header">
+                      <span className="admin-votes-cell"><ActivityIcon className="icon icon-sm" />{car.voteCount}</span>
+                    </td>
                     <td><span className="admin-badge">{car.source}</span></td>
-                    <td className="admin-row-actions">
-                      <button className="btn-secondary btn-icon-only" onClick={() => setEditingCar(car)} aria-label="Edit" title="Edit"><PencilIcon className="icon icon-sm" /></button>
-                      <button className="btn-danger btn-icon-only" onClick={() => remove(car)} aria-label="Delete" title="Delete"><TrashIcon className="icon icon-sm" /></button>
+                    <td>
+                      <div className="admin-row-actions">
+                        <button className="btn-secondary btn-icon-only" onClick={() => setEditingCar(car)} aria-label="Edit" title="Edit"><PencilIcon className="icon icon-sm" /></button>
+                        <button className="btn-danger btn-icon-only" onClick={() => remove(car)} aria-label="Delete" title="Delete"><TrashIcon className="icon icon-sm" /></button>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -347,13 +353,15 @@ function RequestsTab({ onChanged }) {
             <tbody>
               {data.content.map((req) => (
                 <tr key={req.id}>
-                  <td className="admin-vehicle-cell">
-                    <div className="admin-thumb admin-thumb-placeholder"><CarIcon className="icon" /></div>
-                    <div className="admin-vehicle-identity">
-                      <div className="admin-vehicle-name">{req.make} {req.model}</div>
-                      {(req.year || req.note) && (
-                        <div className="admin-vehicle-variant">{[req.year, req.note].filter(Boolean).join(' · ')}</div>
-                      )}
+                  <td>
+                    <div className="admin-vehicle-cell">
+                      <div className="admin-thumb admin-thumb-placeholder"><CarIcon className="icon" /></div>
+                      <div className="admin-vehicle-identity">
+                        <div className="admin-vehicle-name">{req.make} {req.model}</div>
+                        {(req.year || req.note) && (
+                          <div className="admin-vehicle-variant">{[req.year, req.note].filter(Boolean).join(' · ')}</div>
+                        )}
+                      </div>
                     </div>
                   </td>
                   <td>
@@ -363,9 +371,11 @@ function RequestsTab({ onChanged }) {
                   <td>{req.createdAt ? new Date(req.createdAt).toLocaleDateString() : '—'}</td>
                   <td><span className={`admin-status-pill ${STATUS_PILL[req.status] || ''}`}>{req.status}</span></td>
                   {status === 'PENDING' && (
-                    <td className="admin-row-actions">
-                      <button className="btn-primary btn-icon-only" onClick={() => approve(req)} aria-label="Approve" title="Approve"><CheckIcon className="icon icon-sm" /></button>
-                      <button className="btn-danger btn-icon-only" onClick={() => reject(req)} aria-label="Reject" title="Reject"><XIcon className="icon icon-sm" /></button>
+                    <td>
+                      <div className="admin-row-actions">
+                        <button className="btn-primary btn-icon-only" onClick={() => approve(req)} aria-label="Approve" title="Approve"><CheckIcon className="icon icon-sm" /></button>
+                        <button className="btn-danger btn-icon-only" onClick={() => reject(req)} aria-label="Reject" title="Reject"><XIcon className="icon icon-sm" /></button>
+                      </div>
                     </td>
                   )}
                 </tr>

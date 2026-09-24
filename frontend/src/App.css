@@ -1677,16 +1677,19 @@
 }
 
 .admin-table th.admin-votes-header,
-.admin-table td.admin-votes-cell {
+.admin-table td.admin-votes-header {
   /* The bare class alone (0,1,0) lost to the base ".admin-table th"/"td" rule (0,1,1) regardless
      of source order - it never actually applied. Matching th/td here restores it. */
   text-align: right;
 }
 
 .admin-votes-cell {
-  display: flex;
+  /* inline-flex, not flex, and on a <span> inside the <td> - not on the <td> itself. A <td> with
+     display:flex stops taking part in the table's row-height sync entirely, so it and its
+     siblings end up different heights in the same row and their bottom borders land at different
+     Y positions - the "broken separator line" this was reported as. */
+  display: inline-flex;
   align-items: center;
-  justify-content: flex-end;
   gap: 6px;
 }
 
