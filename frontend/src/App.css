@@ -454,9 +454,6 @@
 .row-thumb {
   width: 44px;
   height: 32px;
-  border-radius: 6px;
-  overflow: hidden;
-  background: var(--surface-2);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -464,10 +461,9 @@
 }
 
 .row-thumb img {
-  width: 100%;
-  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
   object-fit: contain;
-  padding: 2px;
 }
 
 .votes-cell {
@@ -581,12 +577,17 @@
   justify-content: center;
 }
 
-.car-card-image img,
-.car-details-image img {
+.car-card-image img {
   width: 100%;
   height: 100%;
   object-fit: contain;
   padding: 10px;
+}
+
+.car-details-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 .car-card-placeholder {
@@ -711,13 +712,9 @@
 
 .car-details-image {
   aspect-ratio: 16 / 9;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
   margin-bottom: 20px;
 }
 
@@ -866,4 +863,269 @@
   .top3-card.rank-1 {
     order: -1;
   }
+}
+
+/* ---------- Modal (car request, admin edit) ---------- */
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 24px;
+  overflow-y: auto;
+}
+
+.modal {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  width: 100%;
+  max-width: 420px;
+  max-height: 90vh;
+  overflow-y: auto;
+  /* Flex items don't shrink below their content size by default, so on short viewports the
+     backdrop's align-items:center pushes this above max-height and the top gets clipped instead
+     of scrolling - this forces it to respect max-height. */
+  flex-shrink: 0;
+  margin: auto;
+}
+
+.modal-wide {
+  max-width: 640px;
+}
+
+.modal h2 {
+  margin-top: 0;
+  color: var(--text-h);
+}
+
+.modal h3 {
+  color: var(--text-h);
+  font-size: 14px;
+  margin: 16px 0 8px;
+}
+
+.modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.modal-form input,
+.modal-form textarea,
+.admin-toolbar select {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 12px;
+  color: var(--text-h);
+  font: inherit;
+  width: 100%;
+}
+
+.modal-form textarea {
+  min-height: 70px;
+  resize: vertical;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.form-error {
+  color: var(--accent);
+  font-size: 13px;
+  margin: 0;
+}
+
+.btn-primary,
+.btn-secondary,
+.btn-danger {
+  border: none;
+  border-radius: 8px;
+  padding: 9px 16px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--accent-hover);
+}
+
+.btn-secondary {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+
+.btn-danger {
+  background: none;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+}
+
+.btn-danger:hover {
+  background: var(--accent-bg);
+}
+
+/* ---------- Admin dashboard ---------- */
+
+.admin-page {
+  padding-top: 24px;
+}
+
+.admin-page h1 {
+  color: var(--text-h);
+}
+
+.admin-stats {
+  display: flex;
+  gap: 16px;
+  margin: 20px 0;
+}
+
+.admin-stat {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.admin-stat strong {
+  font-size: 24px;
+  color: var(--text-h);
+}
+
+.admin-stat span {
+  font-size: 13px;
+  color: var(--text-dim);
+}
+
+.admin-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.admin-tabs button {
+  background: none;
+  border: none;
+  color: var(--text);
+  padding: 10px 16px;
+  font-weight: 600;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+}
+
+.admin-tabs button.active {
+  color: var(--text-h);
+  border-bottom-color: var(--accent);
+}
+
+.admin-toolbar {
+  margin-bottom: 16px;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.admin-search {
+  flex: 1;
+  max-width: 360px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 9px 14px;
+  color: var(--text-h);
+  font: inherit;
+}
+
+.admin-image-editor {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.admin-image-preview {
+  width: 120px;
+  height: 90px;
+  background: #000;
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.admin-image-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.admin-image-preview span {
+  color: var(--text-dim);
+  font-size: 12px;
+}
+
+.admin-upload-btn {
+  cursor: pointer;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.admin-table th,
+.admin-table td {
+  text-align: left;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+}
+
+.admin-table th {
+  color: var(--text-dim);
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.admin-table td {
+  color: var(--text-h);
+}
+
+.admin-row-actions {
+  display: flex;
+  gap: 8px;
 }
