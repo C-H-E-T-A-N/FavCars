@@ -67,6 +67,9 @@
 }
 
 .navbar-search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   flex: 1;
   max-width: 320px;
   margin-left: auto;
@@ -989,7 +992,11 @@
   }
 
   .navbar-request-car {
-    width: 100%;
+    /* Matches the Google-login button's sizing (content-width, not stretched) - it sits one
+       level shallower in the flex tree than .navbar-auth's children, so it inherited
+       align-items:stretch from .navbar-collapse and stretched edge-to-edge while every other
+       mobile menu item stayed content-sized. */
+    align-self: center;
   }
 }
 
