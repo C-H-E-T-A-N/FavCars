@@ -1,0 +1,59 @@
+:root {
+  --bg: #0b0c0f;
+  --surface: #16171c;
+  --surface-2: #1c1e24;
+  --border: #2a2c34;
+  --text: #a3a6b3;
+  --text-h: #ffffff;
+  --text-dim: #6b6e7a;
+  --accent: #e5344a;
+  --accent-hover: #ff4358;
+  --accent-bg: rgba(229, 52, 74, 0.12);
+  --live: #22c55e;
+
+  --sans: 'Inter', system-ui, 'Segoe UI', Roboto, sans-serif;
+
+  font: 16px/150% var(--sans);
+  color-scheme: dark;
+  color: var(--text);
+  background: var(--bg);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+}
+
+#root {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+}
+
+h1, h2, h3 {
+  font-family: var(--sans);
+  font-weight: 700;
+  color: var(--text-h);
+  margin: 0;
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+}
+
+button {
+  font-family: var(--sans);
+  cursor: pointer;
+}
