@@ -5,7 +5,9 @@
   --border: #2a2c34;
   --text: #a3a6b3;
   --text-h: #ffffff;
-  --text-dim: #6b6e7a;
+  /* Lightened from #6b6e7a (3.85:1 on --bg, below the 4.5:1 AA threshold used at its normal
+     small-text sizes like table headers/meta) to 4.99:1, same hue, smallest shift that clears it. */
+  --text-dim: #7d8090;
   --accent: #e5344a;
   --accent-hover: #ff4358;
   --accent-bg: rgba(229, 52, 74, 0.12);

@@ -941,6 +941,13 @@
   .top3-card.rank-1 {
     order: -1;
   }
+  .hero-stats {
+    /* A plain flex-wrap orphans the 4th stat alone on its own row (3-then-1) at narrow widths -
+       a deliberate 2x2 grid reads as intentional instead of just "ran out of room". */
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px 16px;
+  }
 }
 
 /* Below this, the navbar switches from "shrink everything" to a real hamburger menu instead -
