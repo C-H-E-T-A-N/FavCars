@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { getCar, getRanking } from '../services/api';
 import VoteButton from '../components/VoteButton';
+import { ChevronLeftIcon } from '../components/icons';
 
 const SPEC_ROWS = [
   ['Make', (c) => c.make],
@@ -41,7 +42,7 @@ export default function CarDetails() {
 
   return (
     <div className="car-details">
-      <Link to="/" className="back-link">← Back to leaderboard</Link>
+      <Link to="/" className="back-link"><ChevronLeftIcon className="icon icon-sm" /> Back to leaderboard</Link>
 
       {ranking?.rank && <div className="car-details-rank-badge">#{ranking.rank} GLOBAL RANK</div>}
 

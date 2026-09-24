@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Pagination from '../components/Pagination';
+import { CheckIcon, PencilIcon, PlusIcon, TrashIcon, UploadIcon, XIcon } from '../components/icons';
 import {
   getAdminStats, getAdminCars, createAdminCar, updateAdminCar, deleteAdminCar,
   getAdminCarRequests, approveCarRequest, rejectCarRequest, uploadAdminImage,
@@ -120,7 +121,7 @@ function CarEditModal({ car, onClose, onSaved }) {
             </div>
             <div className="admin-image-upload">
               <label className="btn-secondary admin-upload-btn">
-                {uploading ? 'Uploading...' : 'Upload image'}
+                {uploading ? 'Uploading...' : <><UploadIcon className="icon icon-sm" /> Upload image</>}
                 <input type="file" accept="image/jpeg,image/png,image/webp,image/gif" onChange={uploadImage} disabled={uploading} hidden />
               </label>
               {uploadError && <p className="form-error">{uploadError}</p>}
@@ -134,8 +135,10 @@ function CarEditModal({ car, onClose, onSaved }) {
           </div>
 
           <div className="modal-actions">
-            <button type="button" className="btn-secondary" onClick={onClose}>Cancel</button>
-            <button type="submit" className="btn-primary" disabled={saving}>{saving ? 'Saving...' : 'Save'}</button>
+            <button type="button" className="btn-secondary" onClick={onClose}><XIcon className="icon icon-sm" /> Cancel</button>
+            <button type="submit" className="btn-primary" disabled={saving}>
+              {saving ? 'Saving...' : <><CheckIcon className="icon icon-sm" /> Save</>}
+            </button>
           </div>
         </form>
       </div>
@@ -185,7 +188,7 @@ function CarsTab() {
           value={query}
           onChange={(e) => onQueryChange(e.target.value)}
         />
-        <button className="btn-primary" onClick={() => setShowAdd(true)}>+ Add Car</button>
+        <button className="btn-primary" onClick={() => setShowAdd(true)}><PlusIcon className="icon icon-sm" /> Add Car</button>
       </div>
 
       {loading ? (
@@ -209,8 +212,8 @@ function CarsTab() {
                   <td>{car.voteCount}</td>
                   <td>{car.source}</td>
                   <td className="admin-row-actions">
-                    <button className="btn-secondary" onClick={() => setEditingCar(car)}>Edit</button>
-                    <button className="btn-danger" onClick={() => remove(car)}>Delete</button>
+                    <button className="btn-secondary" onClick={() => setEditingCar(car)}><PencilIcon className="icon icon-sm" /> Edit</button>
+                    <button className="btn-danger" onClick={() => remove(car)}><TrashIcon className="icon icon-sm" /> Delete</button>
                   </td>
                 </tr>
               ))}
@@ -282,8 +285,8 @@ function RequestsTab() {
                   <td>{req.requestedByName} ({req.requestedByEmail})</td>
                   {status === 'PENDING' && (
                     <td className="admin-row-actions">
-                      <button className="btn-primary" onClick={() => approve(req)}>Approve</button>
-                      <button className="btn-danger" onClick={() => reject(req)}>Reject</button>
+                      <button className="btn-primary" onClick={() => approve(req)}><CheckIcon className="icon icon-sm" /> Approve</button>
+                      <button className="btn-danger" onClick={() => reject(req)}><XIcon className="icon icon-sm" /> Reject</button>
                     </td>
                   )}
                 </tr>

@@ -5,6 +5,7 @@ import { useLeaderboard } from '../hooks/useLeaderboard';
 import { useElapsedLabel } from '../hooks/useElapsedLabel';
 import Pagination from '../components/Pagination';
 import { getStats } from '../services/api';
+import { ArrowRightIcon, SearchIcon } from '../components/icons';
 
 function formatVotes(n) {
   return n.toLocaleString('en-US');
@@ -56,7 +57,7 @@ export default function Leaderboard() {
           <h1>THE WORLD'S<br />CAR <span className="accent">LEADERBOARD</span></h1>
           <p>Vote for the cars you love. Discover legends. See what the world drives.</p>
           <form className="hero-search" onSubmit={submitHeroSearch} role="search">
-            <span aria-hidden="true">🔍</span>
+            <SearchIcon className="icon" />
             <input
               type="text"
               placeholder="Search for any car (e.g. BMW M3, Toyota Supra, Ferrari 296)"
@@ -152,7 +153,11 @@ export default function Leaderboard() {
                     {entry.car.make} {entry.car.model}
                   </td>
                   <td className="votes-cell">{formatVotes(entry.votes)}</td>
-                  <td className="view-cell"><Link to={`/cars/${entry.car.id}`}>→</Link></td>
+                  <td className="view-cell">
+                    <Link to={`/cars/${entry.car.id}`} aria-label={`View ${entry.car.make} ${entry.car.model}`}>
+                      <ArrowRightIcon className="icon icon-sm" />
+                    </Link>
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -167,7 +172,7 @@ export default function Leaderboard() {
           <h3>Not seeing your favorite car?</h3>
           <p>Browse the full catalog and vote for any car in the collection.</p>
         </div>
-        <Link to="/explore" className="cta-button">Explore Cars →</Link>
+        <Link to="/explore" className="cta-button">Explore Cars <ArrowRightIcon className="icon icon-sm" /></Link>
       </section>
     </div>
   );

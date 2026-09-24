@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { SearchIcon, XIcon } from './icons';
 
 export default function SearchBar({ initialValue = '', onSearch }) {
   const [value, setValue] = useState(initialValue);
@@ -12,7 +13,7 @@ export default function SearchBar({ initialValue = '', onSearch }) {
         onSearch(value.trim());
       }}
     >
-      <span aria-hidden="true">🔍</span>
+      <SearchIcon className="icon" />
       <input
         type="text"
         placeholder="Search cars..."
@@ -21,7 +22,9 @@ export default function SearchBar({ initialValue = '', onSearch }) {
         onChange={(e) => setValue(e.target.value)}
       />
       {value && (
-        <button type="button" aria-label="Clear search" onClick={() => { setValue(''); onSearch(''); }}>×</button>
+        <button type="button" aria-label="Clear search" onClick={() => { setValue(''); onSearch(''); }}>
+          <XIcon className="icon icon-sm" />
+        </button>
       )}
     </form>
   );

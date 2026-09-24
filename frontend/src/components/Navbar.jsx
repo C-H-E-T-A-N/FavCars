@@ -2,6 +2,7 @@ import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { googleLoginUrl, submitCarRequest } from '../services/api';
+import { CheckIcon, PlusIcon, SearchIcon, XIcon } from './icons';
 
 export default function Navbar() {
   const { user, loading, logout } = useAuth();
@@ -75,7 +76,7 @@ export default function Navbar() {
         </nav>
 
         <form className="navbar-search" onSubmit={submitSearch} role="search">
-          <span aria-hidden="true">🔍</span>
+          <SearchIcon className="icon" />
           <input
             type="text"
             placeholder="Search"
@@ -97,7 +98,9 @@ export default function Navbar() {
           )}
         </div>
 
-        <button type="button" className="navbar-request-car" onClick={openRequestForm}>+ Request a Car</button>
+        <button type="button" className="navbar-request-car" onClick={openRequestForm}>
+          <PlusIcon className="icon" /> Request a Car
+        </button>
       </div>
 
       {showRequestForm && (
@@ -107,7 +110,7 @@ export default function Navbar() {
             {requestStatus === 'sent' ? (
               <>
                 <p>Thanks! An admin will review your request.</p>
-                <button className="btn-primary" onClick={() => setShowRequestForm(false)}>Close</button>
+                <button className="btn-primary" onClick={() => setShowRequestForm(false)}><CheckIcon className="icon icon-sm" /> Close</button>
               </>
             ) : (
               <form onSubmit={submitRequestForm} className="modal-form">
@@ -136,9 +139,9 @@ export default function Navbar() {
                 />
                 {requestStatus === 'error' && <p className="form-error">Something went wrong. Try again.</p>}
                 <div className="modal-actions">
-                  <button type="button" className="btn-secondary" onClick={() => setShowRequestForm(false)}>Cancel</button>
+                  <button type="button" className="btn-secondary" onClick={() => setShowRequestForm(false)}><XIcon className="icon icon-sm" /> Cancel</button>
                   <button type="submit" className="btn-primary" disabled={requestStatus === 'sending'}>
-                    {requestStatus === 'sending' ? 'Sending...' : 'Submit'}
+                    {requestStatus === 'sending' ? 'Sending...' : <><CheckIcon className="icon icon-sm" /> Submit</>}
                   </button>
                 </div>
               </form>

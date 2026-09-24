@@ -24,7 +24,7 @@ describe('VoteButton', () => {
 
     renderButton();
 
-    const link = await screen.findByRole('link', { name: '❤️ Vote for this car' });
+    const link = await screen.findByRole('link', { name: 'Vote for this car' });
     expect(link).toHaveAttribute('href', 'http://localhost:8080/oauth2/authorization/google');
   });
 
@@ -36,10 +36,10 @@ describe('VoteButton', () => {
 
     renderButton(onVoted);
 
-    const button = await screen.findByRole('button', { name: '❤️ VOTE FOR THIS CAR' });
+    const button = await screen.findByRole('button', { name: 'VOTE FOR THIS CAR' });
     await userEvent.click(button);
 
-    expect(await screen.findByRole('button', { name: '✓ VOTED' })).toBeDisabled();
+    expect(await screen.findByRole('button', { name: 'VOTED' })).toBeDisabled();
     expect(onVoted).toHaveBeenCalledWith({ voteCount: 43, rank: 2 });
   });
 
@@ -49,7 +49,7 @@ describe('VoteButton', () => {
 
     renderButton();
 
-    expect(await screen.findByRole('button', { name: '✓ VOTED' })).toBeDisabled();
+    expect(await screen.findByRole('button', { name: 'VOTED' })).toBeDisabled();
     expect(api.voteForCar).not.toHaveBeenCalled();
   });
 
@@ -60,10 +60,10 @@ describe('VoteButton', () => {
 
     renderButton();
 
-    const button = await screen.findByRole('button', { name: '❤️ VOTE FOR THIS CAR' });
+    const button = await screen.findByRole('button', { name: 'VOTE FOR THIS CAR' });
     await userEvent.click(button);
 
     await waitFor(() => expect(screen.getByText('You have already voted for this car.')).toBeInTheDocument());
-    expect(screen.getByRole('button', { name: '✓ VOTED' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'VOTED' })).toBeDisabled();
   });
 });

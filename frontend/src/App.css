@@ -5,6 +5,19 @@
   width: 100%;
 }
 
+/* ---------- Icons (see components/icons.jsx) ---------- */
+
+.icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.icon-sm {
+  width: 14px;
+  height: 14px;
+}
+
 /* ---------- Navbar ---------- */
 
 .navbar {
@@ -128,7 +141,9 @@
   text-decoration: none;
   font-weight: 700;
   font-size: 14px;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .navbar-login:hover,
@@ -505,6 +520,8 @@
   color: var(--accent);
   text-decoration: none;
   font-weight: 700;
+  display: inline-flex;
+  align-items: center;
 }
 
 /* ---------- CTA banner ---------- */
@@ -540,6 +557,9 @@
   text-decoration: none;
   font-weight: 700;
   white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
 
 /* ---------- Explore page (search + grid) ---------- */
@@ -570,10 +590,11 @@
 }
 
 .search-bar button {
+  display: flex;
+  align-items: center;
   border: none;
   background: none;
   cursor: pointer;
-  font-size: 18px;
   color: var(--text);
 }
 
@@ -653,6 +674,9 @@
   color: var(--accent);
   font-weight: 600;
   font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
 }
 
 /* ---------- Pagination ---------- */
@@ -667,6 +691,9 @@
 }
 
 .pagination button {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   border: 1px solid var(--border);
   background: var(--surface);
   border-radius: 6px;
@@ -737,7 +764,9 @@
   color: var(--accent);
   text-decoration: none;
   font-weight: 600;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   margin-bottom: 16px;
 }
 
@@ -856,6 +885,9 @@
 /* ---------- Request a Car button ---------- */
 
 .navbar-request-car {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   background: var(--accent);
   color: #fff;
   border: none;
@@ -1140,6 +1172,9 @@
 .btn-primary,
 .btn-secondary,
 .btn-danger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   border: none;
   border-radius: 8px;
   padding: 9px 16px;

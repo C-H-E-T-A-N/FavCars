@@ -1,3 +1,5 @@
+import { ChevronLeftIcon, ChevronRightIcon } from './icons';
+
 export default function Pagination({ page, totalPages, onPageChange }) {
   if (totalPages <= 1) return null;
 
@@ -15,7 +17,9 @@ export default function Pagination({ page, totalPages, onPageChange }) {
 
   return (
     <nav className="pagination">
-      <button disabled={page === 0} onClick={() => onPageChange(page - 1)}>← Previous</button>
+      <button disabled={page === 0} onClick={() => onPageChange(page - 1)}>
+        <ChevronLeftIcon className="icon icon-sm" /> Previous
+      </button>
       {items.map((p, i) =>
         p === '…' ? (
           <span key={`ellipsis-${i}`} className="pagination-ellipsis">…</span>
@@ -29,7 +33,9 @@ export default function Pagination({ page, totalPages, onPageChange }) {
           </button>
         )
       )}
-      <button disabled={page >= totalPages - 1} onClick={() => onPageChange(page + 1)}>Next →</button>
+      <button disabled={page >= totalPages - 1} onClick={() => onPageChange(page + 1)}>
+        Next <ChevronRightIcon className="icon icon-sm" />
+      </button>
     </nav>
   );
 }
