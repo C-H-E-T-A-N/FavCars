@@ -3,10 +3,15 @@ import { createPortal } from 'react-dom';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Pagination from '../components/Pagination';
-import { CheckIcon, PencilIcon, PlusIcon, TrashIcon, UploadIcon, XIcon } from '../components/icons';
+import { useCountUp } from '../hooks/useCountUp';
+import { useEscapeKey } from '../hooks/useEscapeKey';
+import {
+  ActivityIcon, CarIcon, CheckIcon, ClipboardIcon, PencilIcon,
+  PlusIcon, SearchIcon, TrashIcon, UploadIcon, UsersIcon, XIcon,
+} from '../components/icons';
 import {
   getAdminStats, getAdminCars, createAdminCar, updateAdminCar, deleteAdminCar,
-  getAdminCarRequests, approveCarRequest, rejectCarRequest, uploadAdminImage,
+  getAdminCarRequests, approveCarRequest, rejectCarRequest, uploadAdminImage, getStats,
 } from '../services/api';
 
 const EMPTY_CAR = {
@@ -47,12 +52,22 @@ function toApiCar(form) {
   };
 }
 
+function VehicleThumb({ car }) {
+  return car.image?.url ? (
+    <img className="admin-thumb" src={car.image.url} alt="" />
+  ) : (
+    <div className="admin-thumb admin-thumb-placeholder"><CarIcon className="icon" /></div>
+  );
+}
+
 function CarEditModal({ car, onClose, onSaved }) {
   const [form, setForm] = useState(toFormCar(car || {}));
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState(null);
   const isNew = !car?.id;
+
+  useEscapeKey(onClose);
 
   const set = (field, value) => setForm((f) => ({ ...f, [field]: value }));
   const setNested = (group, field, value) => setForm((f) => ({ ...f, [group]: { ...f[group], [field]: value } }));
@@ -148,10 +163,10 @@ function CarEditModal({ car, onClose, onSaved }) {
   );
 }
 
-function CarsTab() {
+function CarsTab({ onChanged }) {
   const [page, setPage] = useState(0);
   const [query, setQuery] = useState('');
-  const [data, setData] = useState({ content: [], totalPages: 0 });
+  const [data, setData] = useState({ content: [], totalPages: 0, totalElements: 0 });
   const [loading, setLoading] = useState(true);
   const [editingCar, setEditingCar] = useState(null);
   const [showAdd, setShowAdd] = useState(false);
@@ -172,69 +187,107 @@ function CarsTab() {
     setEditingCar(null);
     setShowAdd(false);
     load();
+    onChanged();
   };
 
   const remove = async (car) => {
     if (!window.confirm(`Delete ${car.make} ${car.model}? This can't be undone.`)) return;
     await deleteAdminCar(car.id);
     load();
+    onChanged();
   };
 
+  const rangeStart = data.totalElements === 0 ? 0 : page * 25 + 1;
+  const rangeEnd = Math.min((page + 1) * 25, data.totalElements);
+
   return (
-    <div>
-      <div className="admin-toolbar">
-        <input
-          className="admin-search"
-          placeholder="Search cars by make, model, or variant..."
-          aria-label="Search cars"
-          value={query}
-          onChange={(e) => onQueryChange(e.target.value)}
-        />
-        <button className="btn-primary" onClick={() => setShowAdd(true)}><PlusIcon className="icon icon-sm" /> Add Car</button>
+    <section className="admin-catalog">
+      <div className="admin-section-header">
+        <div className="admin-section-title">
+          <span className="admin-accent-bar" />
+          <div>
+            <h2>Car Catalog</h2>
+            <p>Manage all vehicles in the FavCars database.</p>
+          </div>
+        </div>
+        <div className="admin-toolbar">
+          <div className="admin-search-field">
+            <SearchIcon className="icon" />
+            <input
+              className="admin-search"
+              placeholder="Search by make, model, or variant..."
+              aria-label="Search cars"
+              value={query}
+              onChange={(e) => onQueryChange(e.target.value)}
+            />
+          </div>
+          <button className="btn-primary" onClick={() => setShowAdd(true)}><PlusIcon className="icon icon-sm" /> Add Car</button>
+        </div>
       </div>
 
       {loading ? (
         <p className="status-message status-loading">Loading...</p>
       ) : data.content.length === 0 ? (
-        <p className="status-message">No cars found.</p>
-      ) : (
-        <div className="admin-table-wrap">
-          <table className="admin-table">
-            <thead>
-              <tr>
-                <th>Make</th><th>Model</th><th>Year</th><th>Votes</th><th>Source</th><th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.content.map((car) => (
-                <tr key={car.id}>
-                  <td>{car.make}</td>
-                  <td>{car.model}</td>
-                  <td>{car.year ?? '—'}</td>
-                  <td>{car.voteCount}</td>
-                  <td>{car.source}</td>
-                  <td className="admin-row-actions">
-                    <button className="btn-secondary btn-icon-only" onClick={() => setEditingCar(car)} aria-label="Edit" title="Edit"><PencilIcon className="icon icon-sm" /></button>
-                    <button className="btn-danger btn-icon-only" onClick={() => remove(car)} aria-label="Delete" title="Delete"><TrashIcon className="icon icon-sm" /></button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div className="admin-empty-state">
+          <CarIcon className="icon" />
+          <p>No cars found.</p>
         </div>
-      )}
+      ) : (
+        <>
+          <div className="admin-table-wrap">
+            <table className="admin-table">
+              <thead>
+                <tr>
+                  <th>Vehicle</th><th>Year</th><th>Votes</th><th>Source</th><th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {data.content.map((car) => (
+                  <tr key={car.id}>
+                    <td className="admin-vehicle-cell">
+                      <VehicleThumb car={car} />
+                      <div className="admin-vehicle-identity">
+                        <div className="admin-vehicle-name">{car.make} {car.model}</div>
+                        {car.variant && <div className="admin-vehicle-variant">{car.variant}</div>}
+                      </div>
+                    </td>
+                    <td>{car.year ?? '—'}</td>
+                    <td className="admin-votes-cell"><ActivityIcon className="icon icon-sm" />{car.voteCount}</td>
+                    <td><span className="admin-badge">{car.source}</span></td>
+                    <td className="admin-row-actions">
+                      <button className="btn-secondary btn-icon-only" onClick={() => setEditingCar(car)} aria-label="Edit" title="Edit"><PencilIcon className="icon icon-sm" /></button>
+                      <button className="btn-danger btn-icon-only" onClick={() => remove(car)} aria-label="Delete" title="Delete"><TrashIcon className="icon icon-sm" /></button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
 
-      <Pagination page={page} totalPages={data.totalPages} onPageChange={setPage} />
+          <div className="admin-pagination-footer">
+            <span className="admin-pagination-count">
+              Showing {rangeStart}–{rangeEnd} of {data.totalElements.toLocaleString('en-US')} vehicles
+            </span>
+            <Pagination page={page} totalPages={data.totalPages} onPageChange={setPage} />
+          </div>
+        </>
+      )}
 
       {editingCar && <CarEditModal car={editingCar} onClose={() => setEditingCar(null)} onSaved={onSaved} />}
       {showAdd && <CarEditModal car={null} onClose={() => setShowAdd(false)} onSaved={onSaved} />}
-    </div>
+    </section>
   );
 }
 
-function RequestsTab() {
+const STATUS_PILL = {
+  PENDING: 'admin-status-pending',
+  APPROVED: 'admin-status-approved',
+  REJECTED: 'admin-status-rejected',
+};
+
+function RequestsTab({ onChanged }) {
   const [status, setStatus] = useState('PENDING');
-  const [data, setData] = useState({ content: [], totalPages: 0 });
+  const [data, setData] = useState({ content: [], totalPages: 0, totalElements: 0 });
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(0);
 
@@ -248,43 +301,67 @@ function RequestsTab() {
   const approve = async (req) => {
     await approveCarRequest(req.id);
     load();
+    onChanged();
   };
 
   const reject = async (req) => {
     await rejectCarRequest(req.id);
     load();
+    onChanged();
   };
 
   return (
-    <div>
-      <div className="admin-toolbar">
-        <select value={status} onChange={(e) => { setStatus(e.target.value); setPage(0); }}>
-          <option value="PENDING">Pending</option>
-          <option value="APPROVED">Approved</option>
-          <option value="REJECTED">Rejected</option>
-        </select>
+    <section className="admin-catalog">
+      <div className="admin-section-header">
+        <div className="admin-section-title">
+          <span className="admin-accent-bar" />
+          <div>
+            <h2>Car Requests</h2>
+            <p>Review and manage community vehicle requests.</p>
+          </div>
+        </div>
+        <div className="admin-toolbar">
+          <select className="admin-status-filter" value={status} onChange={(e) => { setStatus(e.target.value); setPage(0); }}>
+            <option value="PENDING">Pending</option>
+            <option value="APPROVED">Approved</option>
+            <option value="REJECTED">Rejected</option>
+          </select>
+        </div>
       </div>
 
       {loading ? (
         <p className="status-message status-loading">Loading...</p>
       ) : data.content.length === 0 ? (
-        <p className="status-message">No {status.toLowerCase()} requests.</p>
+        <div className="admin-empty-state">
+          <ClipboardIcon className="icon" />
+          <p>No {status.toLowerCase()} requests.</p>
+        </div>
       ) : (
         <div className="admin-table-wrap">
           <table className="admin-table">
             <thead>
               <tr>
-                <th>Make</th><th>Model</th><th>Year</th><th>Note</th><th>Requested by</th>{status === 'PENDING' && <th></th>}
+                <th>Vehicle</th><th>Requested By</th><th>Date</th><th>Status</th>{status === 'PENDING' && <th>Actions</th>}
               </tr>
             </thead>
             <tbody>
               {data.content.map((req) => (
                 <tr key={req.id}>
-                  <td>{req.make}</td>
-                  <td>{req.model}</td>
-                  <td>{req.year ?? '—'}</td>
-                  <td>{req.note || '—'}</td>
-                  <td>{req.requestedByName} ({req.requestedByEmail})</td>
+                  <td className="admin-vehicle-cell">
+                    <div className="admin-thumb admin-thumb-placeholder"><CarIcon className="icon" /></div>
+                    <div className="admin-vehicle-identity">
+                      <div className="admin-vehicle-name">{req.make} {req.model}</div>
+                      {(req.year || req.note) && (
+                        <div className="admin-vehicle-variant">{[req.year, req.note].filter(Boolean).join(' · ')}</div>
+                      )}
+                    </div>
+                  </td>
+                  <td>
+                    <div className="admin-vehicle-name">{req.requestedByName}</div>
+                    <div className="admin-vehicle-variant">{req.requestedByEmail}</div>
+                  </td>
+                  <td>{req.createdAt ? new Date(req.createdAt).toLocaleDateString() : '—'}</td>
+                  <td><span className={`admin-status-pill ${STATUS_PILL[req.status] || ''}`}>{req.status}</span></td>
                   {status === 'PENDING' && (
                     <td className="admin-row-actions">
                       <button className="btn-primary btn-icon-only" onClick={() => approve(req)} aria-label="Approve" title="Approve"><CheckIcon className="icon icon-sm" /></button>
@@ -299,6 +376,20 @@ function RequestsTab() {
       )}
 
       <Pagination page={page} totalPages={data.totalPages} onPageChange={setPage} />
+    </section>
+  );
+}
+
+function MetricCard({ icon, label, value, description }) {
+  const animated = useCountUp(value);
+  return (
+    <div className="admin-metric">
+      <div className="admin-metric-icon">{icon}</div>
+      <div className="admin-metric-body">
+        <span className="admin-metric-label">{label}</span>
+        <strong className="admin-metric-value">{animated.toLocaleString('en-US')}</strong>
+        <span className="admin-metric-desc">{description}</span>
+      </div>
     </div>
   );
 }
@@ -306,10 +397,16 @@ function RequestsTab() {
 export default function Admin() {
   const { user, loading: authLoading } = useAuth();
   const [tab, setTab] = useState('cars');
-  const [stats, setStats] = useState(null);
+  const [adminStats, setAdminStats] = useState(null);
+  const [publicStats, setPublicStats] = useState(null);
+
+  const refreshStats = () => {
+    getAdminStats().then(setAdminStats);
+    getStats().then(setPublicStats);
+  };
 
   useEffect(() => {
-    if (user?.role === 'ADMIN') getAdminStats().then(setStats);
+    if (user?.role === 'ADMIN') refreshStats();
   }, [user]);
 
   if (authLoading) return null;
@@ -317,22 +414,44 @@ export default function Admin() {
 
   return (
     <div className="admin-page">
-      <h1>Admin Dashboard</h1>
+      <section className="admin-hero">
+        <div className="admin-hero-content">
+          <div className="admin-eyebrow">Admin</div>
+          <h1>CONTROL <span className="accent">CENTER</span></h1>
+          <p>Manage the FavCars automotive ecosystem.</p>
+          <div className="admin-system-status">
+            <span className="live-dot" /> System Operational
+          </div>
+        </div>
+      </section>
 
-      {stats && (
-        <div className="admin-stats">
-          <div className="admin-stat"><strong>{stats.totalCars}</strong><span>Total Cars</span></div>
-          <div className="admin-stat"><strong>{stats.totalUsers}</strong><span>Total Users</span></div>
-          <div className="admin-stat"><strong>{stats.pendingRequests}</strong><span>Pending Requests</span></div>
+      {(adminStats || publicStats) && (
+        <div className="admin-metrics">
+          <MetricCard icon={<CarIcon className="icon" />} label="Total Cars"
+            value={adminStats?.totalCars ?? 0} description="In database" />
+          <MetricCard icon={<UsersIcon className="icon" />} label="Total Users"
+            value={adminStats?.totalUsers ?? 0} description="Registered users" />
+          <MetricCard icon={<ClipboardIcon className="icon" />} label="Pending Requests"
+            value={adminStats?.pendingRequests ?? 0} description="Awaiting review" />
+          <MetricCard icon={<ActivityIcon className="icon" />} label="Total Votes"
+            value={publicStats?.totalVotes ?? 0} description="From all cars" />
         </div>
       )}
 
       <div className="admin-tabs">
-        <button className={tab === 'cars' ? 'active' : ''} onClick={() => setTab('cars')}>Cars</button>
-        <button className={tab === 'requests' ? 'active' : ''} onClick={() => setTab('requests')}>Car Requests</button>
+        <button className={tab === 'cars' ? 'active' : ''} onClick={() => setTab('cars')}>
+          <CarIcon className="icon icon-sm" /> Cars
+          {adminStats && <span className="admin-tab-count">{adminStats.totalCars.toLocaleString('en-US')}</span>}
+        </button>
+        <button className={tab === 'requests' ? 'active' : ''} onClick={() => setTab('requests')}>
+          <ClipboardIcon className="icon icon-sm" /> Car Requests
+          {adminStats && <span className="admin-tab-count">{adminStats.pendingRequests.toLocaleString('en-US')}</span>}
+        </button>
       </div>
 
-      {tab === 'cars' ? <CarsTab /> : <RequestsTab />}
+      {tab === 'cars'
+        ? <CarsTab onChanged={refreshStats} />
+        : <RequestsTab onChanged={refreshStats} />}
     </div>
   );
 }

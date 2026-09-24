@@ -3,7 +3,10 @@ import { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useAuth } from '../context/AuthContext';
 import { googleLoginUrl, submitCarRequest } from '../services/api';
-import { CheckIcon, PlusIcon, SearchIcon, XIcon } from './icons';
+import { useEscapeKey } from '../hooks/useEscapeKey';
+import { CalendarIcon, CarIcon, CheckIcon, PlusIcon, SearchIcon, XIcon } from './icons';
+
+const NOTE_MAX_LENGTH = 500;
 
 export default function Navbar() {
   const { user, loading, logout } = useAuth();
@@ -31,6 +34,8 @@ export default function Navbar() {
     setRequestStatus(null);
     setShowRequestForm(true);
   };
+
+  useEscapeKey(() => { if (showRequestForm) setShowRequestForm(false); });
 
   const submitRequestForm = async (e) => {
     e.preventDefault();
@@ -106,43 +111,81 @@ export default function Navbar() {
 
       {showRequestForm && createPortal(
         <div className="modal-backdrop" onClick={() => setShowRequestForm(false)}>
-          <div className="modal" onClick={(e) => e.stopPropagation()}>
-            <h2>Request a Car</h2>
+          <div className="modal modal-request-car" onClick={(e) => e.stopPropagation()}>
+            <button type="button" className="modal-close" aria-label="Close" onClick={() => setShowRequestForm(false)}>
+              <XIcon className="icon icon-sm" />
+            </button>
+            <div className="modal-request-header">
+              <div className="modal-request-icon"><CarIcon className="icon" /></div>
+              <div>
+                <h2>Request a Vehicle</h2>
+                <p>Add a car to the world's car leaderboard.</p>
+              </div>
+            </div>
+            <div className="modal-divider" />
             {requestStatus === 'sent' ? (
               <>
                 <p>Thanks! An admin will review your request.</p>
-                <button className="btn-primary" onClick={() => setShowRequestForm(false)}><CheckIcon className="icon icon-sm" /> Close</button>
+                <div className="modal-actions">
+                  <button className="btn-primary" onClick={() => setShowRequestForm(false)}><CheckIcon className="icon icon-sm" /> Close</button>
+                </div>
               </>
             ) : (
               <form onSubmit={submitRequestForm} className="modal-form">
-                <input
-                  placeholder="Make (e.g. Toyota)"
-                  value={requestForm.make}
-                  onChange={(e) => setRequestForm({ ...requestForm, make: e.target.value })}
-                  required
-                />
-                <input
-                  placeholder="Model (e.g. Supra)"
-                  value={requestForm.model}
-                  onChange={(e) => setRequestForm({ ...requestForm, model: e.target.value })}
-                  required
-                />
-                <input
-                  placeholder="Year (optional)"
-                  type="number"
-                  value={requestForm.year}
-                  onChange={(e) => setRequestForm({ ...requestForm, year: e.target.value })}
-                />
-                <textarea
-                  placeholder="Why should we add it? (optional)"
-                  value={requestForm.note}
-                  onChange={(e) => setRequestForm({ ...requestForm, note: e.target.value })}
-                />
+                <div className="form-grid">
+                  <label className="modal-field">
+                    <span className="modal-label">Make *</span>
+                    <span className="modal-input-icon">
+                      <CarIcon className="icon icon-sm" />
+                      <input
+                        placeholder="e.g. Toyota"
+                        value={requestForm.make}
+                        onChange={(e) => setRequestForm({ ...requestForm, make: e.target.value })}
+                        required
+                      />
+                    </span>
+                  </label>
+                  <label className="modal-field">
+                    <span className="modal-label">Model *</span>
+                    <span className="modal-input-icon">
+                      <CarIcon className="icon icon-sm" />
+                      <input
+                        placeholder="e.g. Supra"
+                        value={requestForm.model}
+                        onChange={(e) => setRequestForm({ ...requestForm, model: e.target.value })}
+                        required
+                      />
+                    </span>
+                  </label>
+                </div>
+                <label className="modal-field">
+                  <span className="modal-label">Year</span>
+                  <span className="modal-input-icon">
+                    <CalendarIcon className="icon icon-sm" />
+                    <input
+                      placeholder="e.g. 2025"
+                      type="number"
+                      value={requestForm.year}
+                      onChange={(e) => setRequestForm({ ...requestForm, year: e.target.value })}
+                    />
+                  </span>
+                </label>
+                <label className="modal-field">
+                  <span className="modal-label">Why should we add it?</span>
+                  <textarea
+                    placeholder="Tell us why this vehicle deserves to be in FavCars..."
+                    value={requestForm.note}
+                    maxLength={NOTE_MAX_LENGTH}
+                    onChange={(e) => setRequestForm({ ...requestForm, note: e.target.value })}
+                  />
+                  <span className="modal-char-count">{requestForm.note.length}/{NOTE_MAX_LENGTH}</span>
+                </label>
                 {requestStatus === 'error' && <p className="form-error">Something went wrong. Try again.</p>}
+                <div className="modal-divider" />
                 <div className="modal-actions">
                   <button type="button" className="btn-secondary" onClick={() => setShowRequestForm(false)}><XIcon className="icon icon-sm" /> Cancel</button>
                   <button type="submit" className="btn-primary" disabled={requestStatus === 'sending'}>
-                    {requestStatus === 'sending' ? 'Sending...' : <><CheckIcon className="icon icon-sm" /> Submit</>}
+                    {requestStatus === 'sending' ? 'Submitting...' : <><CheckIcon className="icon icon-sm" /> Submit Request</>}
                   </button>
                 </div>
               </form>
