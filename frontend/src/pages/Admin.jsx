@@ -181,6 +181,7 @@ function CarsTab() {
         <input
           className="admin-search"
           placeholder="Search cars by make, model, or variant..."
+          aria-label="Search cars"
           value={query}
           onChange={(e) => onQueryChange(e.target.value)}
         />
@@ -188,32 +189,34 @@ function CarsTab() {
       </div>
 
       {loading ? (
-        <p className="status-message">Loading...</p>
+        <p className="status-message status-loading">Loading...</p>
       ) : data.content.length === 0 ? (
         <p className="status-message">No cars found.</p>
       ) : (
-        <table className="admin-table">
-          <thead>
-            <tr>
-              <th>Make</th><th>Model</th><th>Year</th><th>Votes</th><th>Source</th><th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.content.map((car) => (
-              <tr key={car.id}>
-                <td>{car.make}</td>
-                <td>{car.model}</td>
-                <td>{car.year ?? '—'}</td>
-                <td>{car.voteCount}</td>
-                <td>{car.source}</td>
-                <td className="admin-row-actions">
-                  <button className="btn-secondary" onClick={() => setEditingCar(car)}>Edit</button>
-                  <button className="btn-danger" onClick={() => remove(car)}>Delete</button>
-                </td>
+        <div className="admin-table-wrap">
+          <table className="admin-table">
+            <thead>
+              <tr>
+                <th>Make</th><th>Model</th><th>Year</th><th>Votes</th><th>Source</th><th></th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {data.content.map((car) => (
+                <tr key={car.id}>
+                  <td>{car.make}</td>
+                  <td>{car.model}</td>
+                  <td>{car.year ?? '—'}</td>
+                  <td>{car.voteCount}</td>
+                  <td>{car.source}</td>
+                  <td className="admin-row-actions">
+                    <button className="btn-secondary" onClick={() => setEditingCar(car)}>Edit</button>
+                    <button className="btn-danger" onClick={() => remove(car)}>Delete</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
 
       <Pagination page={page} totalPages={data.totalPages} onPageChange={setPage} />
@@ -258,34 +261,36 @@ function RequestsTab() {
       </div>
 
       {loading ? (
-        <p className="status-message">Loading...</p>
+        <p className="status-message status-loading">Loading...</p>
       ) : data.content.length === 0 ? (
         <p className="status-message">No {status.toLowerCase()} requests.</p>
       ) : (
-        <table className="admin-table">
-          <thead>
-            <tr>
-              <th>Make</th><th>Model</th><th>Year</th><th>Note</th><th>Requested by</th>{status === 'PENDING' && <th></th>}
-            </tr>
-          </thead>
-          <tbody>
-            {data.content.map((req) => (
-              <tr key={req.id}>
-                <td>{req.make}</td>
-                <td>{req.model}</td>
-                <td>{req.year ?? '—'}</td>
-                <td>{req.note || '—'}</td>
-                <td>{req.requestedByName} ({req.requestedByEmail})</td>
-                {status === 'PENDING' && (
-                  <td className="admin-row-actions">
-                    <button className="btn-primary" onClick={() => approve(req)}>Approve</button>
-                    <button className="btn-danger" onClick={() => reject(req)}>Reject</button>
-                  </td>
-                )}
+        <div className="admin-table-wrap">
+          <table className="admin-table">
+            <thead>
+              <tr>
+                <th>Make</th><th>Model</th><th>Year</th><th>Note</th><th>Requested by</th>{status === 'PENDING' && <th></th>}
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {data.content.map((req) => (
+                <tr key={req.id}>
+                  <td>{req.make}</td>
+                  <td>{req.model}</td>
+                  <td>{req.year ?? '—'}</td>
+                  <td>{req.note || '—'}</td>
+                  <td>{req.requestedByName} ({req.requestedByEmail})</td>
+                  {status === 'PENDING' && (
+                    <td className="admin-row-actions">
+                      <button className="btn-primary" onClick={() => approve(req)}>Approve</button>
+                      <button className="btn-danger" onClick={() => reject(req)}>Reject</button>
+                    </td>
+                  )}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
 
       <Pagination page={page} totalPages={data.totalPages} onPageChange={setPage} />

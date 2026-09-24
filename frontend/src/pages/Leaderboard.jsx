@@ -55,11 +55,12 @@ export default function Leaderboard() {
           <div className="hero-eyebrow">DRIVEN BY PASSION</div>
           <h1>THE WORLD'S<br />CAR <span className="accent">LEADERBOARD</span></h1>
           <p>Vote for the cars you love. Discover legends. See what the world drives.</p>
-          <form className="hero-search" onSubmit={submitHeroSearch}>
-            <span>🔍</span>
+          <form className="hero-search" onSubmit={submitHeroSearch} role="search">
+            <span aria-hidden="true">🔍</span>
             <input
               type="text"
               placeholder="Search for any car (e.g. BMW M3, Toyota Supra, Ferrari 296)"
+              aria-label="Search for any car"
               value={heroQuery}
               onChange={(e) => setHeroQuery(e.target.value)}
             />
@@ -93,7 +94,7 @@ export default function Leaderboard() {
           </div>
         </div>
 
-        {loading && !lastUpdated && <p className="status-message">Loading leaderboard…</p>}
+        {loading && !lastUpdated && <p className="status-message status-loading">Loading leaderboard…</p>}
         {error && <p className="status-message status-error">{error}</p>}
 
         {!loading && !error && top3.length === 0 && page === 0 && (

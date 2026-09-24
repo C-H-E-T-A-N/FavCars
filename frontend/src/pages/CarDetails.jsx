@@ -37,7 +37,7 @@ export default function CarDetails() {
   }, [id]);
 
   if (error) return <p className="status-message status-error">{error}</p>;
-  if (!car) return <p className="status-message">Loading…</p>;
+  if (!car) return <p className="status-message status-loading">Loading…</p>;
 
   return (
     <div className="car-details">

@@ -24,7 +24,7 @@ export default function Landing() {
     <div className="landing">
       <SearchBar initialValue={query} onSearch={setQuery} />
 
-      {loading && <p className="status-message">Loading cars…</p>}
+      {loading && <p className="status-message status-loading">Loading cars…</p>}
       {error && <p className="status-message status-error">{error}</p>}
 
       {!loading && !error && data.content.length === 0 && (
