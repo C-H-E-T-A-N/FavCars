@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { getVoteStatus, voteForCar, googleLoginUrl } from '../services/api';
+import { CheckIcon, HeartIcon } from './icons';
 
 /** Reports the vote result back up via onVoted({ voteCount, rank }) so the page can update
  *  votes/rank live without a full reload - the backend/Redis response is the only source of truth. */
@@ -55,7 +56,7 @@ export default function VoteButton({ carId, onVoted }) {
   if (!user) {
     return (
       <>
-        <a className="vote-button" href={googleLoginUrl}>❤️ Vote for this car</a>
+        <a className="vote-button" href={googleLoginUrl}><HeartIcon className="icon icon-sm" /> Vote for this car</a>
         <p className="vote-hint">Sign in with Google to vote.</p>
       </>
     );
@@ -64,7 +65,7 @@ export default function VoteButton({ carId, onVoted }) {
   if (hasVoted) {
     return (
       <>
-        <button className="vote-button voted" disabled>✓ VOTED</button>
+        <button className="vote-button voted" disabled><CheckIcon className="icon icon-sm" /> VOTED</button>
         {error && <p className="vote-error">{error}</p>}
       </>
     );
@@ -73,7 +74,7 @@ export default function VoteButton({ carId, onVoted }) {
   return (
     <>
       <button className="vote-button" onClick={handleVote} disabled={submitting}>
-        {submitting ? 'Voting…' : '❤️ VOTE FOR THIS CAR'}
+        {submitting ? 'Voting…' : <><HeartIcon className="icon icon-sm" /> VOTE FOR THIS CAR</>}
       </button>
       {error && <p className="vote-error">{error}</p>}
     </>

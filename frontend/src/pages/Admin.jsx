@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Pagination from '../components/Pagination';
+import { CheckIcon, PencilIcon, PlusIcon, TrashIcon, UploadIcon, XIcon } from '../components/icons';
 import {
   getAdminStats, getAdminCars, createAdminCar, updateAdminCar, deleteAdminCar,
   getAdminCarRequests, approveCarRequest, rejectCarRequest, uploadAdminImage,
@@ -83,7 +85,7 @@ function CarEditModal({ car, onClose, onSaved }) {
     }
   };
 
-  return (
+  return createPortal(
     <div className="modal-backdrop" onClick={onClose}>
       <div className="modal modal-wide" onClick={(e) => e.stopPropagation()}>
         <h2>{isNew ? 'Add Car' : `Edit ${car.make} ${car.model}`}</h2>
@@ -120,7 +122,7 @@ function CarEditModal({ car, onClose, onSaved }) {
             </div>
             <div className="admin-image-upload">
               <label className="btn-secondary admin-upload-btn">
-                {uploading ? 'Uploading...' : 'Upload image'}
+                {uploading ? 'Uploading...' : <><UploadIcon className="icon icon-sm" /> Upload image</>}
                 <input type="file" accept="image/jpeg,image/png,image/webp,image/gif" onChange={uploadImage} disabled={uploading} hidden />
               </label>
               {uploadError && <p className="form-error">{uploadError}</p>}
@@ -134,12 +136,15 @@ function CarEditModal({ car, onClose, onSaved }) {
           </div>
 
           <div className="modal-actions">
-            <button type="button" className="btn-secondary" onClick={onClose}>Cancel</button>
-            <button type="submit" className="btn-primary" disabled={saving}>{saving ? 'Saving...' : 'Save'}</button>
+            <button type="button" className="btn-secondary" onClick={onClose}><XIcon className="icon icon-sm" /> Cancel</button>
+            <button type="submit" className="btn-primary" disabled={saving}>
+              {saving ? 'Saving...' : <><CheckIcon className="icon icon-sm" /> Save</>}
+            </button>
           </div>
         </form>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
 
@@ -181,39 +186,42 @@ function CarsTab() {
         <input
           className="admin-search"
           placeholder="Search cars by make, model, or variant..."
+          aria-label="Search cars"
           value={query}
           onChange={(e) => onQueryChange(e.target.value)}
         />
-        <button className="btn-primary" onClick={() => setShowAdd(true)}>+ Add Car</button>
+        <button className="btn-primary" onClick={() => setShowAdd(true)}><PlusIcon className="icon icon-sm" /> Add Car</button>
       </div>
 
       {loading ? (
-        <p className="status-message">Loading...</p>
+        <p className="status-message status-loading">Loading...</p>
       ) : data.content.length === 0 ? (
         <p className="status-message">No cars found.</p>
       ) : (
-        <table className="admin-table">
-          <thead>
-            <tr>
-              <th>Make</th><th>Model</th><th>Year</th><th>Votes</th><th>Source</th><th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.content.map((car) => (
-              <tr key={car.id}>
-                <td>{car.make}</td>
-                <td>{car.model}</td>
-                <td>{car.year ?? '—'}</td>
-                <td>{car.voteCount}</td>
-                <td>{car.source}</td>
-                <td className="admin-row-actions">
-                  <button className="btn-secondary" onClick={() => setEditingCar(car)}>Edit</button>
-                  <button className="btn-danger" onClick={() => remove(car)}>Delete</button>
-                </td>
+        <div className="admin-table-wrap">
+          <table className="admin-table">
+            <thead>
+              <tr>
+                <th>Make</th><th>Model</th><th>Year</th><th>Votes</th><th>Source</th><th></th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {data.content.map((car) => (
+                <tr key={car.id}>
+                  <td>{car.make}</td>
+                  <td>{car.model}</td>
+                  <td>{car.year ?? '—'}</td>
+                  <td>{car.voteCount}</td>
+                  <td>{car.source}</td>
+                  <td className="admin-row-actions">
+                    <button className="btn-secondary btn-icon-only" onClick={() => setEditingCar(car)} aria-label="Edit" title="Edit"><PencilIcon className="icon icon-sm" /></button>
+                    <button className="btn-danger btn-icon-only" onClick={() => remove(car)} aria-label="Delete" title="Delete"><TrashIcon className="icon icon-sm" /></button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
 
       <Pagination page={page} totalPages={data.totalPages} onPageChange={setPage} />
@@ -258,34 +266,36 @@ function RequestsTab() {
       </div>
 
       {loading ? (
-        <p className="status-message">Loading...</p>
+        <p className="status-message status-loading">Loading...</p>
       ) : data.content.length === 0 ? (
         <p className="status-message">No {status.toLowerCase()} requests.</p>
       ) : (
-        <table className="admin-table">
-          <thead>
-            <tr>
-              <th>Make</th><th>Model</th><th>Year</th><th>Note</th><th>Requested by</th>{status === 'PENDING' && <th></th>}
-            </tr>
-          </thead>
-          <tbody>
-            {data.content.map((req) => (
-              <tr key={req.id}>
-                <td>{req.make}</td>
-                <td>{req.model}</td>
-                <td>{req.year ?? '—'}</td>
-                <td>{req.note || '—'}</td>
-                <td>{req.requestedByName} ({req.requestedByEmail})</td>
-                {status === 'PENDING' && (
-                  <td className="admin-row-actions">
-                    <button className="btn-primary" onClick={() => approve(req)}>Approve</button>
-                    <button className="btn-danger" onClick={() => reject(req)}>Reject</button>
-                  </td>
-                )}
+        <div className="admin-table-wrap">
+          <table className="admin-table">
+            <thead>
+              <tr>
+                <th>Make</th><th>Model</th><th>Year</th><th>Note</th><th>Requested by</th>{status === 'PENDING' && <th></th>}
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {data.content.map((req) => (
+                <tr key={req.id}>
+                  <td>{req.make}</td>
+                  <td>{req.model}</td>
+                  <td>{req.year ?? '—'}</td>
+                  <td>{req.note || '—'}</td>
+                  <td>{req.requestedByName} ({req.requestedByEmail})</td>
+                  {status === 'PENDING' && (
+                    <td className="admin-row-actions">
+                      <button className="btn-primary btn-icon-only" onClick={() => approve(req)} aria-label="Approve" title="Approve"><CheckIcon className="icon icon-sm" /></button>
+                      <button className="btn-danger btn-icon-only" onClick={() => reject(req)} aria-label="Reject" title="Reject"><XIcon className="icon icon-sm" /></button>
+                    </td>
+                  )}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
 
       <Pagination page={page} totalPages={data.totalPages} onPageChange={setPage} />

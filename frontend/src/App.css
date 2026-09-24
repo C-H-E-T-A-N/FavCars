@@ -5,19 +5,40 @@
   width: 100%;
 }
 
+/* ---------- Icons (see components/icons.jsx) ---------- */
+
+.icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.icon-sm {
+  width: 14px;
+  height: 14px;
+}
+
 /* ---------- Navbar ---------- */
 
 .navbar {
   display: flex;
   align-items: center;
   gap: 32px;
-  padding: 18px 32px;
+  /* Matches .app-main's max-width:1200px + 24px gutter exactly, so the logo/content edges
+     align at any viewport width instead of the navbar's old flat 32px padding drifting out
+     of alignment with the page content below it on wide screens. */
+  padding: 18px max(24px, calc((100% - 1200px) / 2));
   border-bottom: 1px solid var(--border);
   position: sticky;
   top: 0;
   background: rgba(11, 12, 15, 0.85);
+  -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
   z-index: 10;
+}
+
+.navbar-toggle {
+  display: none;
 }
 
 .navbar-brand {
@@ -30,6 +51,13 @@
 
 .navbar-brand span {
   color: var(--accent);
+}
+
+/* On desktop this renders its children (.navbar-links, .navbar-search, .navbar-auth,
+   .navbar-request-car) as direct flex items of .navbar, so the existing desktop layout rules
+   below need no change at all - it only becomes a real, collapsible column below 860px. */
+.navbar-collapse {
+  display: contents;
 }
 
 .navbar-links {
@@ -52,6 +80,9 @@
 }
 
 .navbar-search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   flex: 1;
   max-width: 320px;
   margin-left: auto;
@@ -110,7 +141,9 @@
   text-decoration: none;
   font-weight: 700;
   font-size: 14px;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .navbar-login:hover,
@@ -122,7 +155,8 @@
 
 .app-footer {
   border-top: 1px solid var(--border);
-  padding: 24px 32px;
+  /* Same container alignment fix as .navbar - see its comment. */
+  padding: 24px max(24px, calc((100% - 1200px) / 2));
   text-align: center;
   color: var(--text-dim);
   font-size: 14px;
@@ -168,7 +202,8 @@
 }
 
 .hero-copy h1 {
-  font-size: 42px;
+  /* Scales smoothly between mobile and desktop instead of snapping at a single breakpoint. */
+  font-size: clamp(28px, 6vw, 42px);
   line-height: 1.1;
   letter-spacing: -1px;
   margin-bottom: 16px;
@@ -317,6 +352,12 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.top3-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3);
 }
 
 .top3-card.rank-1 {
@@ -433,6 +474,10 @@
   border-bottom: 1px solid var(--border);
 }
 
+.leaderboard-table tr {
+  transition: background-color 0.15s ease;
+}
+
 .leaderboard-table tr:hover {
   background: var(--surface);
 }
@@ -475,6 +520,8 @@
   color: var(--accent);
   text-decoration: none;
   font-weight: 700;
+  display: inline-flex;
+  align-items: center;
 }
 
 /* ---------- CTA banner ---------- */
@@ -510,6 +557,9 @@
   text-decoration: none;
   font-weight: 700;
   white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
 
 /* ---------- Explore page (search + grid) ---------- */
@@ -540,10 +590,11 @@
 }
 
 .search-bar button {
+  display: flex;
+  align-items: center;
   border: none;
   background: none;
   cursor: pointer;
-  font-size: 18px;
   color: var(--text);
 }
 
@@ -623,6 +674,9 @@
   color: var(--accent);
   font-weight: 600;
   font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
 }
 
 /* ---------- Pagination ---------- */
@@ -637,6 +691,9 @@
 }
 
 .pagination button {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   border: 1px solid var(--border);
   background: var(--surface);
   border-radius: 6px;
@@ -668,6 +725,29 @@
   padding: 40px 0;
 }
 
+.status-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.status-loading::before {
+  content: '';
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  border-top-color: var(--accent);
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .status-error {
   color: #ff6b6b;
 }
@@ -684,7 +764,9 @@
   color: var(--accent);
   text-decoration: none;
   font-weight: 600;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   margin-bottom: 16px;
 }
 
@@ -803,6 +885,9 @@
 /* ---------- Request a Car button ---------- */
 
 .navbar-request-car {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   background: var(--accent);
   color: #fff;
   border: none;
@@ -810,7 +895,12 @@
   padding: 9px 16px;
   font-weight: 700;
   font-size: 14px;
-  cursor: default;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.navbar-request-car:hover {
+  background: var(--accent-hover);
 }
 
 /* ---------- About page ---------- */
@@ -839,18 +929,6 @@
 /* ---------- Responsive ---------- */
 
 @media (max-width: 860px) {
-  .navbar {
-    flex-wrap: wrap;
-    gap: 12px;
-  }
-  .navbar-search {
-    order: 3;
-    max-width: none;
-    width: 100%;
-  }
-  .navbar-request-car {
-    order: 4;
-  }
   .hero {
     grid-template-columns: 1fr;
   }
@@ -862,6 +940,145 @@
   }
   .top3-card.rank-1 {
     order: -1;
+  }
+}
+
+/* Below this, the navbar switches from "shrink everything" to a real hamburger menu instead -
+   cramming logo + 4 links + search + profile + a CTA button onto one row stops being readable
+   long before mobile widths. */
+@media (max-width: 860px) {
+  .navbar {
+    flex-wrap: wrap;
+  }
+
+  .navbar-toggle {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: 36px;
+    height: 36px;
+    margin-left: auto;
+    background: none;
+    border: none;
+    padding: 0;
+    flex-shrink: 0;
+  }
+
+  .navbar-toggle span {
+    display: block;
+    width: 20px;
+    height: 2px;
+    background: var(--text-h);
+    border-radius: 1px;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+
+  .navbar-toggle[aria-expanded="true"] span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+  .navbar-toggle[aria-expanded="true"] span:nth-child(2) {
+    opacity: 0;
+  }
+  .navbar-toggle[aria-expanded="true"] span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  .navbar-collapse {
+    display: none;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    gap: 16px;
+    padding-top: 16px;
+  }
+
+  .navbar-collapse.open {
+    display: flex;
+  }
+
+  .navbar-links {
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .navbar-search {
+    max-width: none;
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .navbar-auth {
+    width: 100%;
+  }
+
+  .navbar-profile {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .navbar-login {
+    display: block;
+    text-align: center;
+  }
+
+  .navbar-request-car {
+    /* Matches the Google-login button's sizing (content-width, not stretched) - it sits one
+       level shallower in the flex tree than .navbar-auth's children, so it inherited
+       align-items:stretch from .navbar-collapse and stretched edge-to-edge while every other
+       mobile menu item stayed content-sized. */
+    align-self: center;
+  }
+}
+
+@media (max-width: 640px) {
+  .app-main {
+    padding-bottom: 40px;
+  }
+  .leaderboard-table thead {
+    display: none;
+  }
+  .leaderboard-table,
+  .leaderboard-table tbody,
+  .leaderboard-table tr {
+    display: block;
+    width: 100%;
+  }
+  .leaderboard-table tr {
+    display: grid;
+    grid-template-columns: 24px 1fr auto auto;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .leaderboard-table td {
+    display: block;
+    padding: 0;
+    border: none;
+  }
+  .admin-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .admin-search {
+    max-width: none;
+  }
+  .cta-banner {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+  .admin-image-editor {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }
 
@@ -900,7 +1117,9 @@
 }
 
 .modal h2 {
-  margin-top: 0;
+  /* Matches the ~20-28px rhythm every other gap in the modal already uses (flex gap + h3's own
+     margin) - without this the title sat flush against the first field with zero space at all. */
+  margin: 0 0 20px;
   color: var(--text-h);
 }
 
@@ -955,6 +1174,9 @@
 .btn-primary,
 .btn-secondary,
 .btn-danger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   border: none;
   border-radius: 8px;
   padding: 9px 16px;
@@ -988,6 +1210,14 @@
   background: var(--accent-bg);
 }
 
+/* Square icon-only variant for repeated per-row actions (admin table Edit/Delete/Approve/
+   Reject) - the icon alone is unambiguous there, so a text label is just noise repeated once
+   per row. aria-label/title on the button carry the accessible name instead. */
+.btn-icon-only {
+  padding: 9px;
+  gap: 0;
+}
+
 /* ---------- Admin dashboard ---------- */
 
 .admin-page {
@@ -1000,6 +1230,7 @@
 
 .admin-stats {
   display: flex;
+  flex-wrap: wrap;
   gap: 16px;
   margin: 20px 0;
 }
@@ -1097,8 +1328,15 @@
   cursor: pointer;
 }
 
+.admin-table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 10px;
+}
+
 .admin-table {
   width: 100%;
+  min-width: 640px;
   border-collapse: collapse;
   background: var(--surface);
   border: 1px solid var(--border);

@@ -1,7 +1,9 @@
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { useAuth } from '../context/AuthContext';
 import { googleLoginUrl, submitCarRequest } from '../services/api';
+import { CheckIcon, PlusIcon, SearchIcon, XIcon } from './icons';
 
 export default function Navbar() {
   const { user, loading, logout } = useAuth();
@@ -10,13 +12,18 @@ export default function Navbar() {
   const [showRequestForm, setShowRequestForm] = useState(false);
   const [requestForm, setRequestForm] = useState({ make: '', model: '', year: '', note: '' });
   const [requestStatus, setRequestStatus] = useState(null);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   const submitSearch = (e) => {
     e.preventDefault();
-    if (query.trim()) navigate(`/explore?q=${encodeURIComponent(query.trim())}`);
+    if (query.trim()) {
+      navigate(`/explore?q=${encodeURIComponent(query.trim())}`);
+      setMobileOpen(false);
+    }
   };
 
   const openRequestForm = () => {
+    setMobileOpen(false);
     if (!user) {
       window.location.href = googleLoginUrl;
       return;
@@ -45,49 +52,66 @@ export default function Navbar() {
 
   return (
     <header className="navbar">
-      <Link to="/" className="navbar-brand">Fav<span>Cars</span></Link>
+      <Link to="/" className="navbar-brand" onClick={() => setMobileOpen(false)}>Fav<span>Cars</span></Link>
 
-      <nav className="navbar-links">
-        <NavLink to="/" end className={({ isActive }) => isActive ? 'active' : ''}>Leaderboard</NavLink>
-        <NavLink to="/explore" className={({ isActive }) => isActive ? 'active' : ''}>Explore Cars</NavLink>
-        <NavLink to="/about" className={({ isActive }) => isActive ? 'active' : ''}>About</NavLink>
-        {user?.role === 'ADMIN' && (
-          <NavLink to="/admin" className={({ isActive }) => isActive ? 'active' : ''}>Admin</NavLink>
-        )}
-      </nav>
+      <button
+        type="button"
+        className="navbar-toggle"
+        aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+        aria-expanded={mobileOpen}
+        onClick={() => setMobileOpen((open) => !open)}
+      >
+        <span />
+        <span />
+        <span />
+      </button>
 
-      <form className="navbar-search" onSubmit={submitSearch}>
-        <span>🔍</span>
-        <input
-          type="text"
-          placeholder="Search"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-        />
-      </form>
+      <div className={`navbar-collapse${mobileOpen ? ' open' : ''}`}>
+        <nav className="navbar-links">
+          <NavLink to="/" end className={({ isActive }) => isActive ? 'active' : ''} onClick={() => setMobileOpen(false)}>Leaderboard</NavLink>
+          <NavLink to="/explore" className={({ isActive }) => isActive ? 'active' : ''} onClick={() => setMobileOpen(false)}>Explore Cars</NavLink>
+          <NavLink to="/about" className={({ isActive }) => isActive ? 'active' : ''} onClick={() => setMobileOpen(false)}>About</NavLink>
+          {user?.role === 'ADMIN' && (
+            <NavLink to="/admin" className={({ isActive }) => isActive ? 'active' : ''} onClick={() => setMobileOpen(false)}>Admin</NavLink>
+          )}
+        </nav>
 
-      <div className="navbar-auth">
-        {loading ? null : user ? (
-          <div className="navbar-profile">
-            {user.profileImage && <img className="navbar-avatar" src={user.profileImage} alt={user.name} />}
-            <span>{user.name}</span>
-            <button className="navbar-logout" onClick={logout}>Logout</button>
-          </div>
-        ) : (
-          <a className="navbar-login" href={googleLoginUrl}>Continue with Google</a>
-        )}
+        <form className="navbar-search" onSubmit={submitSearch} role="search">
+          <SearchIcon className="icon" />
+          <input
+            type="text"
+            placeholder="Search"
+            aria-label="Search cars"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
+        </form>
+
+        <div className="navbar-auth">
+          {loading ? null : user ? (
+            <div className="navbar-profile">
+              {user.profileImage && <img className="navbar-avatar" src={user.profileImage} alt="" />}
+              <span>{user.name}</span>
+              <button className="navbar-logout" onClick={logout}>Logout</button>
+            </div>
+          ) : (
+            <a className="navbar-login" href={googleLoginUrl}>Continue with Google</a>
+          )}
+        </div>
+
+        <button type="button" className="navbar-request-car" onClick={openRequestForm}>
+          <PlusIcon className="icon" /> Request a Car
+        </button>
       </div>
 
-      <button type="button" className="navbar-request-car" onClick={openRequestForm}>+ Request a Car</button>
-
-      {showRequestForm && (
+      {showRequestForm && createPortal(
         <div className="modal-backdrop" onClick={() => setShowRequestForm(false)}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
             <h2>Request a Car</h2>
             {requestStatus === 'sent' ? (
               <>
                 <p>Thanks! An admin will review your request.</p>
-                <button className="btn-primary" onClick={() => setShowRequestForm(false)}>Close</button>
+                <button className="btn-primary" onClick={() => setShowRequestForm(false)}><CheckIcon className="icon icon-sm" /> Close</button>
               </>
             ) : (
               <form onSubmit={submitRequestForm} className="modal-form">
@@ -116,15 +140,16 @@ export default function Navbar() {
                 />
                 {requestStatus === 'error' && <p className="form-error">Something went wrong. Try again.</p>}
                 <div className="modal-actions">
-                  <button type="button" className="btn-secondary" onClick={() => setShowRequestForm(false)}>Cancel</button>
+                  <button type="button" className="btn-secondary" onClick={() => setShowRequestForm(false)}><XIcon className="icon icon-sm" /> Cancel</button>
                   <button type="submit" className="btn-primary" disabled={requestStatus === 'sending'}>
-                    {requestStatus === 'sending' ? 'Sending...' : 'Submit'}
+                    {requestStatus === 'sending' ? 'Sending...' : <><CheckIcon className="icon icon-sm" /> Submit</>}
                   </button>
                 </div>
               </form>
             )}
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </header>
   );
